@@ -1,14 +1,9 @@
 # researcher-llm-wiki
 
-An LLM-maintained research wiki, compiled based on Karpathys [Idea File](https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f) and adapted for deep research workflows..
-
-The human curates sources and asks questions. The LLM does the summarising, cross-referencing, and bookkeeping — with a researcher's mindset that preserves formal definitions, theorems, algorithms, and mathematical detail.
+An LLM-maintained research wiki, compiled based on Karpathys [Idea File](https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f) and adapted for deep research workflows.
 
 ## The idea
-
-The LLM **incrementally builds and maintains a persistent wiki** — a structured, interlinked collection of Markdown files that sits between you and the raw sources. New sources are not just indexed — they are read, extracted in depth, and integrated into the existing wiki. Cross-references are added. Contradictions are flagged. The synthesis grows richer with every source.
-
-You never (or rarely) write the wiki yourself. You curate sources and ask questions. The LLM does the grunt work.
+The human curates sources, *asks good questions*, and steers the direction of inquiry. The LLM does the rest: it *incrementally builds a persistent wiki*, reading each source in depth, integrating findings, adding cross-references, flagging contradictions, and preserving formal definitions, theorems, and algorithms. Every discussion ends with new insights folded back into the wiki — so exploration compounds into lasting knowledge.
 
 ## Architecture
 
@@ -75,8 +70,6 @@ See [CLAUDE.md](CLAUDE.md) for the full schema.
 ## Why this works
 
 The tedious part of a knowledge base isn't the reading — it's the bookkeeping. Cross-references, consistency, summary updates, contradiction tracking. Humans abandon wikis because maintenance grows faster than value. LLMs don't get bored, don't forget to update a backlink, and can touch 15 files in one pass. The wiki stays maintained because maintenance is near-zero cost.
-
-The human curates sources, directs the analysis, **asks good questions**, reflects on what it all means and guides the acquisition of knowledge in a specific direction. The LLM does everything else.
 
 ## Status
 
