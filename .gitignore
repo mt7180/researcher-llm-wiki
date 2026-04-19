@@ -1,0 +1,17 @@
+# Obsidian
+/wiki/.obsidian/plugins/
+/wiki/.obsidian/workspace.json
+/wiki/.obsidian/core-plugins.json
+/wiki/.obsidian/community-plugins.json
+
+# MacOS
+.DS_Store
+*.swp
+*.swo
+*~
+.AppleDouble
+.LSOverride
+
+#Python
+__pycache__/
+*.pyc
