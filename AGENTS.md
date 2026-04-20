@@ -19,9 +19,10 @@ researcher-llm-wiki/
 │   └── wiki-health.py        # Mechanical health checks (uv inline deps)
 ├── .github/
 │   └── agents/
-│       ├── wiki-ingest.md    # Custom ingest agent
-│       └── wiki-health.md    # Custom health check agent
-└── AGENTS.md                 # This file — the schema
+│       ├── wiki-orchestrator.md  # Orchestration agent (delegates ingest → health)
+│       ├── wiki-ingest.md        # Custom ingest agent
+│       └── wiki-health.md        # Custom health check agent
+└── AGENTS.md                     # This file — the schema
 ```
 
 ## Conventions
