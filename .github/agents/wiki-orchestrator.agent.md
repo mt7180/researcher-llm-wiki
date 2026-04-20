@@ -92,6 +92,41 @@ When the user asks a question that may warrant an analysis page:
 5. If yes, delegate to `wiki-ingest` with instructions to create an analysis page (not a source ingest).
 6. Follow up with a `wiki-health` check.
 
+### Re-consult source
+
+Triggered when the user asks to "go back to the source", "check the original paper", or asks a detailed question the wiki can't fully answer.
+
+**Step 1: Delegate source lookup to wiki-ingest**
+
+Call `runSubagent` with agent name `wiki-ingest`. Instruct it to:
+- Identify the relevant raw source file
+- Re-read the original PDF via `pdftotext` (or read non-PDF directly)
+- Search for the specific detail the user is asking about
+- Report findings with precise citations (section, page, quoted passages)
+- Clearly state whether the detail was **found** or **not found** in the source
+
+**Step 2: Present findings and ask the user how to proceed**
+
+After `wiki-ingest` returns, relay its findings to the user. Then use `vscode_askQuestions` to determine next steps.
+
+**If the detail was found in the source**, offer:
+
+1. **Add to wiki** — Integrate the detail into the relevant wiki page(s). Specify which pages would be updated and what would be added.
+2. **Discuss further** — Continue the conversation to explore the topic in more depth before deciding what to capture.
+3. **No action** — The answer was sufficient; no wiki update needed.
+
+**If the detail was NOT found in the source**, offer:
+
+1. **Web search** — Delegate to `wiki-ingest` to search the web for additional sources or clarifications. Present findings and offer to ingest any valuable results.
+2. **Move on** — Accept that the information is unavailable.
+
+**Step 3: Execute the chosen action**
+
+- If **Add to wiki**: Delegate back to `wiki-ingest` with specific instructions on which page(s) to update and what detail to add. Then run `wiki-health` as usual.
+- If **Web search**: Delegate to `wiki-ingest` with instructions to use WebSearch on the topic. Relay results and, if the user wants to ingest a found source, kick off a full ingest cycle.
+- If **Discuss further**: Continue the conversation yourself, re-delegating to `wiki-ingest` for additional source lookups as needed, until the user is ready to decide.
+- If **No action / Move on**: Acknowledge and close the thread.
+
 ## Error handling
 
 - If a sub-agent fails or returns an error, report the failure to the user with context. Do not silently retry.

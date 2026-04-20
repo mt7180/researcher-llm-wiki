@@ -1,6 +1,6 @@
 ---
 name: wiki-ingest
-description: "Wiki ingest agent. Use this agent when the user adds new source documents to raw/ and wants them ingested into the wiki. Handles reading sources, creating/updating wiki pages, cross-linking, and updating the index and log."
+description: "Wiki ingest agent. Use this agent when the user adds new source documents to raw/ and wants them ingested into the wiki or when the user asks to go back to the original source file to answer questions. Handles reading sources, creating/updating wiki pages, cross-linking, and updating the index and log."
 tools: [read, vscode, edit, search, execute, web, vscode]
 model: Claude Opus 4.7 (copilot)
 color: blue
@@ -134,3 +134,47 @@ Ensure all touched pages link to each other where relevant:
 
 After finishing, tell the user: 
 > "Ingest complete.
+
+---
+
+## Re-consult source workflow
+
+Triggered when:
+- The user asks to "go back to the source", "check the original paper", "re-read the PDF", or similar.
+- The user asks a detailed question that the existing wiki pages cannot fully answer.
+- You attempt to answer from wiki content and realise the detail is insufficient.
+
+### Step 1: Identify the relevant source
+
+Determine which raw source file is needed. Check the wiki page's frontmatter `sources` field or the `raw/` path listed in the source summary page. If ambiguous, ask the user which source to consult.
+
+### Step 2: Re-read the source
+
+Extract the full text from the original file:
+
+```
+& "C:\Users\M97142\AppData\Local\miniforge3\Library\bin\pdftotext.exe" "raw/<filename>.pdf" -
+```
+
+For non-PDF sources, read the file directly. Search the extracted text for the specific information the user is asking about.
+
+### Step 3: Report findings
+
+Present the answer with precise citations (section, page, paragraph) from the original source. Quote the relevant passages directly when helpful. Be thorough — the user is asking because the wiki summary wasn't enough.
+
+Clearly state whether the requested detail was **found** or **not found** in the source. This distinction is critical — the orchestrator uses it to decide the next step.
+
+**Return control to the orchestrator after this step.** Do not ask the user how to proceed or decide next actions yourself — that is the orchestrator's job.
+
+### Step 4: Update wiki (when delegated by orchestrator)
+
+If the orchestrator delegates back to you with instructions to add details to the wiki:
+
+- Use the Edit tool for targeted additions to existing pages (follow the same rules as Step 4 of the ingest workflow — read first, surgical edits only, preserve existing content).
+- Update the `updated` date in frontmatter.
+- Update `wiki/log.md` with an entry like:
+
+  ```
+  ## [YYYY-MM-DD] update | Page Title — added detail on <topic>
+  ```
+
