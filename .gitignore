@@ -15,3 +15,10 @@
 #Python
 __pycache__/
 *.pyc
+
+#wiki
+raw/
+
+#Personal
+notes.txt
+

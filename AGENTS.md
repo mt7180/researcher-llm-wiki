@@ -5,13 +5,23 @@ A research wiki maintained by an LLM. The human curates sources and asks questio
 ## Directory structure
 
 ```
-raw/            # Source documents (immutable — the LLM never modifies these)
-raw/assets/     # Downloaded images referenced by sources
-wiki/           # LLM-generated wiki pages (the LLM owns this entirely)
-wiki/index.md   # Content index — catalog of all wiki pages by category
-wiki/log.md     # Chronological activity log (append-only)
-wiki/slides/    # Marp slide decks generated via /marp command
-CLAUDE.md       # This file — the schema
+researcher-llm-wiki/
+├── raw/                      # Source documents (immutable — the LLM never modifies these)
+├── wiki/                     # LLM-generated wiki pages (the LLM owns this entirely)
+│   ├── index.md              # Content index — catalog of all wiki pages by category
+│   ├── log.md                # Chronological activity log (append-only)
+│   ├── sources/              # One summary page per raw source
+│   ├── concepts/             # Topic / theory / method pages spanning sources
+│   ├── entities/             # People, organisations, tools, datasets
+│   ├── analyses/             # Synthesis, comparison, investigation pages
+│   └── slides/               # Marp slide decks generated via /marp command
+├── tools/
+│   └── wiki-health.py        # Mechanical health checks (uv inline deps)
+├── .github/
+│   └── agents/
+│       ├── wiki-ingest.md    # Custom ingest agent
+│       └── wiki-health.md    # Custom health check agent
+└── AGENTS.md                 # This file — the schema
 ```
 
 ## Conventions
@@ -25,7 +35,7 @@ CLAUDE.md       # This file — the schema
   created: YYYY-MM-DD
   updated: YYYY-MM-DD
   tags: [relevant, tags]
-  sources: [list of source filenames this page draws from]
+  sources: [list of raw source filenames this page draws from]
   ---
   ```
 - **Page types**:

@@ -5,8 +5,8 @@ description: >
   1. After any wiki ingest: after creating/updating wiki pages.
   2. When the user asks for a "health check", "lint", "wiki review", or "check the wiki".
   3. After batch updates to multiple wiki pages.
-tools: Bash, Read, Grep, Glob
-model: sonnet
+tools: [execute, read, search]
+model: Claude Sonnet 4.6 (copilot)
 color: green
 ---
 

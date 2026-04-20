@@ -1,8 +1,8 @@
 ---
 name: wiki-ingest
 description: "Wiki ingest agent. Use this agent when the user adds new source documents to raw/ and wants them ingested into the wiki. Handles reading sources, creating/updating wiki pages, cross-linking, and updating the index and log."
-tools: Read, Write, Edit, Glob, Grep, Bash, WebFetch, WebSearch, AskUserQuestion
-model: opus
+tools: [read, vscode, edit, search, execute, web, vscode]
+model: Claude Opus 4.7 (copilot)
 color: blue
 ---
 
@@ -24,17 +24,38 @@ You are the ingest agent for an LLM-maintained research wiki. You think like a *
 
 ## Context
 
-Read `CLAUDE.md` first to understand the wiki schema, conventions, and page formats. Key points:
+Read `AGENTS.md` first to understand the wiki schema, conventions, and page formats. Key points:
 - Wiki pages use Obsidian-style `[[wikilinks]]`
 - Every page (except index.md and log.md) has YAML frontmatter with: title, type, created, updated, tags, sources
 - Page types: source, concept, entity, analysis
 - File naming: lowercase, hyphens for spaces
 
+## Wiki folder structure
+
+```
+wiki/
+├── index.md              # Content catalog — every page listed by category
+├── log.md                # Chronological activity log (append-only)
+├── sources/              # One summary page per raw source
+├── concepts/             # Topic / method / theory pages spanning sources
+├── entities/             # People, organisations, tools, datasets
+├── analyses/             # Synthesis, comparison, investigation pages
+└── slides/               # Marp slide decks (via /marp command)
+```
+
 ## Ingest workflow
 
 ### Step 1: Read the source thoroughly
 
-Read the new file(s) in `raw/`. For PDFs, use `pdftotext` via Bash to extract full text. For URLs, use WebFetch. For LaTeX sources, read the .tex files directly (they contain the most precise mathematical notation).
+Read the new file(s) in `raw/`. For PDFs, use `pdftotext` to extract full text. The executable is located at:
+
+```
+C:\Users\M97142\AppData\Local\miniforge3\Library\bin\pdftotext.exe
+```
+
+Call it as: `& "<PDFTOTEXT_PATH>" input.pdf -` (the trailing `-` prints to stdout).
+
+For URLs, use web fetch. For LaTeX sources, read the .tex files directly (they contain the most precise mathematical notation).
 
 **Read the entire source.** Do not skim. Pay special attention to:
 - Formal definitions, theorems, corollaries, and proofs
